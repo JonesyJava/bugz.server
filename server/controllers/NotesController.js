@@ -8,6 +8,7 @@ export class NotesController extends BaseController {
     this.router
       // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .use(Auth0Provider.getAuthorizedUserInfo)
+      .get('', this.getAllNotes)
       .post('', this.createNote)
       .put('/:id', this.editNote)
       .delete('/:id', this.deleteNote)
@@ -36,6 +37,14 @@ export class NotesController extends BaseController {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
       req.body.creatorId = req.userInfo.id
       res.send(await notesService.createNote(req.body))
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getAllNotes(req, res, next) {
+    try {
+      return res.send(await notesService.getAllNotes())
     } catch (error) {
       next(error)
     }

@@ -22,8 +22,9 @@ class NotesService {
     return await dbContext.Note.create(body)
   }
 
-  async findAllNotes(query) {
-    return await dbContext.Note.find(query)
+  async getAllNotes(query = {}) {
+    const note = await dbContext.Note.find(query).populate('creator')
+    return note
   }
 
   async findNoteByBugId(id) {
